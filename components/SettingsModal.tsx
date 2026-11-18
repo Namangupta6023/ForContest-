@@ -31,13 +31,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const handleUseDemoDefaults = () => {
-    setClientId('AbT-pnbVQsT5BOPupthiBoM1rmTo2-7FnFPJFYwzjGDX3ENhzrGQO0HjaAZm0kis6g3XnzVWx2sDH6Qb');
-    setSecret('EFSDUYrPo92MxtOpFHuu6inYyOJ2E87ZcIsF51X00yyn8JzpuK97ztLuHBvPEiLI6Fk4Du4LNdSfBvId');
-    setGemKey(typeof atob === 'function' ? atob('QVEuQWI4Uk42SWw5bVpVOVhFdmFnam90b1FmTE9Ydjc3OHJWU2VnVzFiR2RqNlFwNXFZamc=') : '');
+    // Credentials are configured server-side via environment variables (.env file).
+    // This button is kept for UI demonstration purposes — configure your .env to enable live API calls.
+    setClientId('');
+    setSecret('');
+    setGemKey('');
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+    >
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -45,54 +52,60 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       >
         <div className="flex items-center justify-between pb-3 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-gray-700" />
-            <h3 className="text-sm font-bold text-gray-900">API Credentials & Sandbox Config</h3>
+            <Settings className="w-5 h-5 text-gray-700" aria-hidden="true" />
+            <h3 id="settings-modal-title" className="text-sm font-bold text-gray-900">API Credentials & Sandbox Config</h3>
           </div>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
-            <X className="w-4 h-4" />
+          <button onClick={onClose} aria-label="Close settings" className="p-1 rounded-lg hover:bg-gray-100 text-gray-400">
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
 
-        <form onSubmit={handleSave} className="space-y-4">
+        <form onSubmit={handleSave} className="space-y-4" noValidate>
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Key className="w-3.5 h-3.5 text-gray-400" />
+            <label htmlFor="paypal-client-id" className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+              <Key className="w-3.5 h-3.5 text-gray-400" aria-hidden="true" />
               <span>PayPal Sandbox Client ID</span>
             </label>
             <input
+              id="paypal-client-id"
               type="text"
               placeholder="e.g. A21AAJ..."
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
+              autoComplete="off"
               className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-mono text-gray-800 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50"
             />
-            <p className="text-[10px] text-gray-400 mt-1">From developer.paypal.com dashboard Apps & Credentials</p>
+            <p className="text-[10px] text-gray-400 mt-1">From developer.paypal.com dashboard Apps &amp; Credentials</p>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Key className="w-3.5 h-3.5 text-gray-400" />
+            <label htmlFor="paypal-secret" className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+              <Key className="w-3.5 h-3.5 text-gray-400" aria-hidden="true" />
               <span>PayPal Sandbox Secret</span>
             </label>
             <input
+              id="paypal-secret"
               type="password"
               placeholder="••••••••••••••••••••••••••••••••"
               value={secret}
               onChange={(e) => setSecret(e.target.value)}
+              autoComplete="new-password"
               className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-mono text-gray-800 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Sparkles className="w-3.5 h-3.5 text-brand-500" />
+            <label htmlFor="gemini-key" className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-brand-500" aria-hidden="true" />
               <span>Google Gemini API Key</span>
             </label>
             <input
+              id="gemini-key"
               type="password"
               placeholder="AIzaSy..."
               value={gemKey}
               onChange={(e) => setGemKey(e.target.value)}
+              autoComplete="new-password"
               className="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs font-mono text-gray-800 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50"
             />
             <p className="text-[10px] text-gray-400 mt-1">Optional — App works with smart built-in heuristic reasoning out-of-the-box!</p>
